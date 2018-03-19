@@ -84,12 +84,16 @@ function getTitle( type ){
 	{
 		type: 'input',
 		name: 'title',
-		message: 'What title shall we search for?'
+		message: 'What title shall we search for?',
+		validate: function(answer){
+			return answer.length > 0 ? true: 'Input a title please';
+		}
 	}
 	]).then( answers =>{ 
 		process.argv[3] = answers.title;
-		if(type === 'song'){ songSearch( process.argv[3] ); }
-		if(type === 'movie'){ movieSearch( process.argv[3] ); }
+		// return console.log(process.argv[3]);
+		if(type === 'song'){ songSearch( process.argv[3] ) }
+		if(type === 'movie'){ movieSearch( process.argv[3] ) }
 	});
 }
 
@@ -103,8 +107,10 @@ function movieSearch( title = 'Mr+Nobody' ) {
 	  		console.log('Pop your popcorn, the movie reel is rolling for...\n');
 	  		console.log('Title: ', movie.Title);
 	  		console.log('Year: ', movie.Year);
-	  		if(imbbRate = movie.Ratings.filter( i => i.Source === ('Internet Movie Database')[0].Value || '') ){ console.log('IMBB Rating: ', imbbRate); }
-	  		if(rottenRate = movie.Ratings.filter( i => i.Source === ('Rotten Tomatoes')[0].Value || '') ){ console.log('Rotten Tomatoes Rating: ', rottenRate); }
+	  		if(movie.Ratings){
+		  		if(imbbRate = movie.Ratings.filter( i => i.Source === ('Internet Movie Database')[0].Value || '') ){ console.log('IMBB Rating: ', imbbRate); }
+		  		if(rottenRate = movie.Ratings.filter( i => i.Source === ('Rotten Tomatoes')[0].Value || '') ){ console.log('Rotten Tomatoes Rating: ', rottenRate); }
+	  		}
 	  		console.log('Plot: ', movie.Plot);
 	  		console.log('--');
 	  		console.log('You need to know the country it was produced in? Okay...: ', movie.Country);
